@@ -1,0 +1,8 @@
+video {
+	display: none;
+}
+
+.tentacle {
+	position: absolute;
+	border: 2px #f00 solid;
+}
