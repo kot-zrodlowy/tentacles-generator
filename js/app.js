@@ -1,7 +1,11 @@
 ( function() {
 	'use strict';
 
-	var capture, canvas, img, downloadButton, tracker;
+	var capture, canvas, img, downloadButton, tracker, tent;
+
+	window.preload = function () {
+		tent = loadImage('./img/tentacle_3.png');
+	}
 
 	window.setup = function() {
 		capture = createCapture( VIDEO );
@@ -16,7 +20,11 @@
 
 		requestAnimationFrame( function frame() {
 			getImage();
-			console.log( tracker.getCurrentPosition() );
+			var position = tracker.getCurrentPosition();
+			if( position ) {
+				var sliced = position.slice(44, 50);
+				addTentacle( sliced[1][0], sliced[1][1] );
+			}
 			requestAnimationFrame( frame );
 		} );
 	}
@@ -42,5 +50,10 @@
 	//download image to disk
 	function download() {
 		saveCanvas( canvas, 'portrait-' + random( 1000 ), 'jpg' );
+	}
+
+	// Add tentacle to canvas
+	function addTentacle( x, y ) {
+		image(tent, x, y);
 	}
 }() );
