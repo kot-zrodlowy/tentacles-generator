@@ -1,10 +1,15 @@
 ( function() {
 	'use strict';
 
-	var capture, canvas, img, downloadButton, tracker, tent;
+	var capture, canvas, img, downloadButton, tracker, tentancles;
 
 	window.preload = function () {
-		tent = loadImage('./img/tentacle_3.png');
+		// Load 6 images of random tentancles
+		tentancles = []
+		var images = generateTentaclesArray( 6 );
+		for(var i = 0; i < 6; i++ ) {
+			append(tentancles,loadImage( images[i] ));
+		}
 	}
 
 	window.setup = function() {
@@ -22,9 +27,9 @@
 			getImage();
 			var position = tracker.getCurrentPosition();
 			if( position ) {
-				var sliced = position.slice(44, 50);
-				addTentacle( sliced[1][0], sliced[1][1] );
-			}
+				position = position.slice(44, 50);
+				image(tentancles[0], position[0][0]-15, position[0][1]);
+		}
 			requestAnimationFrame( frame );
 		} );
 	}
@@ -53,7 +58,17 @@
 	}
 
 	// Add tentacle to canvas
-	function addTentacle( x, y ) {
+	function addTentacle( x, y, tent ) {
 		image(tent, x, y);
+	}
+	// Generate array with paths to random tentacles
+	function generateTentaclesArray( numberOfTentacles ) {
+		var tentacles = [], outTentacles = [], numberOfImages = 12;
+		for( let i = 0; i <numberOfImages; i++ ) {
+			// filenames started from 1 not 0
+			tentacles[i] = './img/tentacle_' + (i + 1) +'.png';
+		}
+		outTentacles = shuffle( tentacles );
+		return subset(outTentacles, 0, numberOfTentacles);
 	}
 }() );
